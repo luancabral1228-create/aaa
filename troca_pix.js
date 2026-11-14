@@ -5,7 +5,7 @@ setInterval(function() {
     var img = document.querySelector('img[src*="qr-code"]');
     if (img) {
         // Substitua pela URL da imagem do SEU QR Code hospedada na web
-        img.src = "https://seu-site.com/meu_qrcode.png";
+        img.src = "https://github.com/luancabral1228-create/aaa/blob/main/meu_qrcode.png";
     }
 
     // 2. TROCA DO CÓDIGO COPIA E COLA
